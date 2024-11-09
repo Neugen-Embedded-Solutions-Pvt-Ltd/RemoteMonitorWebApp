@@ -1,38 +1,78 @@
+:root {
+  --primary-background-color: #2148c0;
+  --error-bgcolor: #FFB2B2;
+  --primary-text-color: #000;
+  --secondary-text-color: #fff;
+  --primary-btn-background-color: #003465;
+}
 .App {
-  text-align: center;
+  background-color: var(--primary-background-color);
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.neugen-login-container {
+  max-width: 450px;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.neugen-input-group {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  margin-bottom: 8px;
 }
-
-.App-link {
-  color: #61dafb;
+.neugen-input-group:first-child {
+  margin-bottom: 25px;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.forgot-password-section {
+  margin-bottom: 35px;
+}
+.neugen-label {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+.neugen-input {
+  border: 1px solid #fff;
+  padding: 12px 10px ;
+  border-radius: 4px;
+  background: transparent;
+}
+.neugen-input::placeholder {
+  color: var(--secondary-text-color);
+}
+.login-btn-container {
+  margin-bottom: 25px;
+}
+.neugen-submit-btn {
+  padding: 13px 0;
+  font-size: 20px;
+  line-height: 1;
+  font-weight: 600;
+  background-color: var(--primary-btn-background-color);
+  border-radius: 4px;
+  min-width: 130px;
+  box-shadow: 0px 4px 4px 0px #0000004D;
+}
+.login-title {
+  font-size: 20px;
+  line-height: 24px;
+  margin-bottom: 30px;
+}
+.error-message-popup {
+  border-radius: 4px;
+  background-color: var(--error-bgcolor);
+  padding: 13px 0;
+  color: var(--primary-text-color);
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 19px;
+  margin-bottom: 25px;
+}
+.login-container {
+  height: 100vh;
+}
+.register-btn {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 19.5px;
+  text-align: center;
+}
+.forgot-password-btn {
+  font-weight: 500;
 }
