@@ -72,8 +72,8 @@ const Register = () => {
         // <>
 <div className='flex w-full h-full justify-center items-center login-container'>
     <div className='neugen-login-container w-full p-8  justify-center'>
-        {/* <h1 className='text-4xl font-bold mb-3 text-center'>Create Account</h1>
-        <p className='text-xl font-normal mb-3  text-center'>Fill the form to create account</p> */}
+        <h1 className='font-bold text-center login-title text-white'>Create Account</h1>
+        {/* <p className='text-xl font-normal mb-3  text-center'>Fill the form to create account</p> */}
         <form className='flex flex-col w-full' id='registerForm' onSubmit={register}>
             <div className='neugen-input-group'>
                 {/* <label className='neugen-label' htmlFor='firstName'>Fist Name</label> */}
