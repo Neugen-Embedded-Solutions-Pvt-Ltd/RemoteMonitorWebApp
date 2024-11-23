@@ -27,7 +27,7 @@ const Login = ({setLoginformData}) => {
         }
     const login = (e) => {
         e.preventDefault(); 
-        axios.post('http://localhost:3001/auth/login', formData)
+        axios.post('http://15.206.212.135:3001/auth/login', formData)
             .then((res) => {
                 console.log(res.data)
                 // let token = res.data.token

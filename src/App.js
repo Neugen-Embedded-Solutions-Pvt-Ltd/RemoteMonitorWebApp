@@ -1,6 +1,7 @@
 import './App.css';
 
 import HomePage from './components/homepage/HomePage';
+import TempratureLive from './components/homepage/TempratureLive'; 
 import Login from './components/login/Login';
 import Register from './components/register/Register';
 
@@ -19,6 +20,8 @@ function App() {
           <Route path='/'  element={<HomePage/>} ></Route>
           <Route path='/login'  element={<Login />}></Route>
           <Route path='/register' element={<Register/>}></Route>
+          <Route path='/temprature'  element={<TempratureLive/>} ></Route>
+
           </Routes>
        </Router>
     </div>

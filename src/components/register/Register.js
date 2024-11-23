@@ -50,7 +50,7 @@ const Register = () => {
         
         if (firstName && lastName && email && password && device_id) {
            
-                axios.post('http://localhost:3001/auth/register', formData)
+                axios.post('http://15.206.212.135:3001/auth/register', formData)
                     .then(response => {
                         console.log(response.data);
                         alert(response.data.message);
