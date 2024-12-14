@@ -25,8 +25,7 @@ function App() {
           <Route path="/" element={<Navigate to={"/login"} />} />
 
           <Route path="/home" element={<HomePage />} />
-  
-  
+          <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/temprature" element={<TempratureLive />} />
           <Route path="/socket" element={<Socketprogram />} />
