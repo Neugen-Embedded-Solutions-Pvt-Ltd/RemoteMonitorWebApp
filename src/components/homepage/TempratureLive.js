@@ -8,7 +8,7 @@ const TempratureLive = () => {
 
     useEffect(() => {
         // Initialize socket connection
-        const socket = io('http://15.206.212.135:3001/');
+        const socket = io('https://localhost:3001/');
 
         // Connection established
         socket.on('connect', () => {

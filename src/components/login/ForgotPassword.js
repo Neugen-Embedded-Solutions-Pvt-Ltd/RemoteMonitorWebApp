@@ -2,37 +2,33 @@ import React, { useState } from "react";
 import Api from "../utils/api";
 import { useNavigate } from "react-router-dom";
 
-const Login = ({ setLoginformData }) => {
+const ForgotPassword = () => {
   let errorFeild = document.getElementById("errorMsg");
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
+  const [username, setUsername] = useState({
     username: "",
-    password: "",
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
+    setUsername((prevData) => ({
       ...prevData,
       [name]: value,
     }));
   };
-  const redirectRegister = () => {
-    navigate("/register");
-  };
-  const login = (e) => {
+  const handleFormSubmit = (e) => {
     e.preventDefault();
-    Api.post("/auth/login", formData)
-      .then((res) => {
-        console.log(res.data);
-
-        localStorage.setItem("token", res.data.token);
-        alert("login success");
-        navigate("/home");
-      })
-      .catch((error) => {
-        console.log(error.response);
+    const fetchData = async () => {
+      try {
+        console.log(username);
+        const response = await Api.post("/auth/forgotpassword", username);
+        let responseData = response.data;
+        if (response.status === 200) {
+          errorFeild.innerHTML = responseData.message;
+        }
+      } catch (error) {
         console.log(error);
         let response = error.response.data;
+        console.log(response);
         if (response.status) {
           errorFeild.classList.add("error-message-popup");
           errorFeild.innerHTML = response.message;
@@ -40,52 +36,42 @@ const Login = ({ setLoginformData }) => {
           errorFeild.classList.add("error-message-popup");
           errorFeild.innerHTML = "resource not found";
         }
-      });
+      }
+    };
+    fetchData();
   };
-  const handleForgotPassword = () => {
-    navigate("/forgotpassword");
+  const handleForgotUsername = () => {
+    navigate("/updateusername");
   };
   return (
     <div className="flex w-full h-full justify-center items-center login-container">
       <div className="neugen-login-container w-full p-8  justify-center">
         <h1 className="font-bold text-center login-title text-white">
-          Sign in to your device
+          Forgot Password
         </h1>
         <div
           className="text-white mb-2  text-center w-full"
           id="errorMsg"
         ></div>
-        <form className="flex flex-col w-full" id="loginForm" onSubmit={login}>
+        <form className="flex flex-col w-full" onSubmit={handleFormSubmit}>
           <div className="neugen-input-group">
             <input
               className="neugen-input focus:outline-none focus:invalid:border-pink-500 focus:invalid:ring-pink-500"
               name="username"
-              type="text"
-              value={formData.username}
+              placeholder="Enter User name"
               onChange={handleChange}
-              placeholder="USERNAME"
+              value={username.username}
               required
             />
           </div>
-          <div className="neugen-input-group mb-0">
-            <input
-              className="neugen-input focus:outline-none focus:invalid:border-pink-500 focus:invalid:ring-pink-500"
-              name="password"
-              type="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="PASSWORD"
-              required
-            />
-          </div>
-          <div className="forgot-password-section flex col justify-start mb-2 mt-2">
+          <div className="forgot-password-section flex col justify-start mb-2">
             <button
               type="button"
               className="text-sm font-semibold text-white forgot-password-btn"
               id="forgotPassword"
-              onClick={handleForgotPassword}
+              onClick={handleForgotUsername}
             >
-              Forgot Password?
+              Forgot Username?
             </button>
           </div>
           <div className="flex justify-center w-full mb-3 login-btn-container">
@@ -93,27 +79,13 @@ const Login = ({ setLoginformData }) => {
               className="neugen-submit-btn w-full text-white"
               type="submit"
             >
-              Login
+              Submit
             </button>
           </div>
         </form>
-
-        <div className="flex justify-center">
-          <div className="flex text-white">
-            Don't have an account?
-            <button
-              type="button"
-              className="text-sm underline ml-2 register-btn"
-              id="createAccount"
-              onClick={redirectRegister}
-            >
-              Register New User
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default ForgotPassword;

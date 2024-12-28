@@ -5,7 +5,7 @@ import React, {
 import {
     Chart
 } from 'react-google-charts';
-import axios from 'axios';
+import Api from "../utils/api";
 import {
     downloadFile
    
@@ -108,12 +108,11 @@ const HomePage = () => {
         const year = today.getFullYear();
         const date = today.getDate();
         return `${month}-${date}-${year}`;
-    }
-
+    };
     // Fetch data for report generation
     async function getData() {
         try {
-            let res = await axios.post('http://15.206.212.135:3001/iot/tempall', formData, {
+            let res = await Api.post('/iot/tempall', formData, {
                 responseType: 'blob',
             });
             res = res.data;
@@ -130,7 +129,7 @@ const HomePage = () => {
     // Fetch chart data
     let fetchChartData = async () => {
         try {
-            let res = await axios.get('http://15.206.212.135:3001/iot/temp');
+            let res = await Api.get('/iot/temp');
             console.log(res);
             res = res.data;
 
@@ -156,7 +155,7 @@ const HomePage = () => {
     // Fetch data on component mount
     useEffect( () => {
         fetchChartData(); 
-    },[0] );
+    },[] );
 
     // Generate report on form submission
     const generateReport = (e) => {

@@ -38,7 +38,7 @@ body {
   border: 1px solid #fff;
   padding: 12px 10px;
   border-radius: 4px;
-  /* background: transparent; */
+  background: transparent;
 }
 
 .neugen-input::placeholder {
