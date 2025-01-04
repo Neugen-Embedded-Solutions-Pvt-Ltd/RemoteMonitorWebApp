@@ -1,0 +1,11 @@
+{
+    "workbench.colorTheme": "Default Dark Modern",
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#22320C",
+        "titleBar.activeBackground": "#304611",
+        "titleBar.activeForeground": "#F6FBF0"
+    },
+    "cSpell.words": [
+        "neugen"
+    ]
+}

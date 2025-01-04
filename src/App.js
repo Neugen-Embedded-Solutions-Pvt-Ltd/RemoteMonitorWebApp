@@ -1,40 +1,40 @@
 import "./App.css";
 
-import HomePage from "./components/homepage/HomePage";
-import TempratureLive from "./components/homepage/TempratureLive";
-import Login from "./components/login/Login";
-import ForgotPassword from "./components/login/ForgotPassword";
-import UpdatePassword from "./components/login/UpdatePassword";
-import Register from "./components/register/Register";
-import UpdateUsername from "./components/login/UpdateUsername";
-import Socketprogram from "./components/socket/Socketprogram";
+import HomePage from "./pages/HomePage";
+import Login from "./pages/Login";  
+import Register from "./pages/Register";  
 
 import React from "react";
-import {
-  BrowserRouter as Router,
+import { 
+  BrowserRouter,
   Routes,
   Route,
   Navigate,
-} from "react-router-dom";
+} from "react-router";
+import { Provider } from "react-redux";
+import { store } from "./redux/slices/store";
 
-function App() {
+function RoutesApp() {
   return (
-    <div className="App">
-      <Router>
+    <div className="App h-dvh">
+      <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Navigate to={"/login"} />} />
+          <Route path="/" element={<Navigate to={"/register"} />} />
 
           <Route path="/home" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/temprature" element={<TempratureLive />} />
-          <Route path="/socket" element={<Socketprogram />} />
-          <Route path="/forgotpassword" element={<ForgotPassword />} />
-          <Route path="/updatepassword" element={<UpdatePassword />} />
-          <Route path="/updateusername" element={<UpdateUsername />} />
         </Routes>
-      </Router>
+      </BrowserRouter>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <Provider store={store}>
+      <RoutesApp />
+    </Provider>
   );
 }
 
