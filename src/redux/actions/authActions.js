@@ -5,7 +5,7 @@ import {
   setUser,
   setError,
   removeError,
-} from "../slices/AuthSlice";
+} from "../slices/AuthSlice.js";
 
 // Helper function to validate email format using RegEx
 const validateEmail = (email) => {
@@ -198,6 +198,62 @@ export const registerUser = (userData, navigate) => async (dispatch) => {
         formType: "register",
         fieldName: error,
         message: error.message,
+      })
+    );
+  }
+};
+
+// Action for user login
+export const LoginUser = (formData, navigate) => (dispatch) => {
+  try {
+   
+    console.log("formData:", formData);
+    dispatch(setLoading(false));
+    dispatch(removeError("login"));
+
+    // Validating all required feilds
+    // let hasErrors = validateRequiredFields(formData, "login", dispatch);
+  
+    // checking valid username
+    // if (formData.username.length < 6) {
+    //   dispatch(
+    //     setError({
+    //       formType: "login",
+    //       fieldName: "username",
+    //       error: "usernmae min length 6",
+    //     })
+    //   );
+    //   hasErrors = true;
+    // }
+
+    // if (hasErrors) return true;
+
+    // Make API call for user login
+    Api.post("/auth/login", formData)
+    .then((response) =>{
+      console.log("login resposne:", response);
+
+      localStorage.setItem("token", response.data.token);
+      dispatch(setUser(response.data));
+      navigate('/home')
+    }
+
+    ).catch((error)=>{
+      console.log(error);
+      dispatch(
+        setError({
+          formType: "login",
+          fieldName: "general",
+          error: error.response.data.message,
+        })
+      );
+    })
+  } catch (error) {
+    dispatch(
+      setError({
+        formType: "login",
+        fieldName: "general",
+        error: error.message,
       })
     );
   }

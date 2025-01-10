@@ -203,7 +203,7 @@ const Register = () => {
       {/* Redirect to login page if already a user */}
       <div className="flex text-center w-full justify-center mt-2 redirect-wrapper">
         <span className="text-sm"> Existing user?</span>
-        <button className="underline ml-2 text-sm" onClick={redirectRegister}>
+        <button className="underline ml-2 text-sm " onClick={redirectRegister}>
           Login
         </button>
       </div>
