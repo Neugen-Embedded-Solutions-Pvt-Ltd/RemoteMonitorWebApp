@@ -7,12 +7,12 @@ import { removeError } from "../redux/slices/AuthSlice";
 import { LoginUser } from "../redux/actions/authActions";
 import { useNavigate } from "react-router-dom";
 
-const Logins = () => {
+const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    dispatch(removeError("login"));
+    // dispatch(removeError("login"));
     // Get errors, user data, and loading state from Redux store
-    const { errors, user } = useSelector((state) => state.auth);
+    const { errors } = useSelector((state) => state.auth);
 
 
     // const [state, formAction, isPending] = useActionState(fn, initialState, permalink?);
@@ -28,8 +28,8 @@ const Logins = () => {
             username: username,
             password: password,
         }
-        dispatch(LoginUser(user, navigate))
-        // dispatch(setUser(user));
+        dispatch(LoginUser(user, navigate));
+
         return {
             user: {
                 username: username,
@@ -45,8 +45,9 @@ const Logins = () => {
             <h2 className="text-center font-bold mb-3">User Login </h2>
             <form className="flex flex-col w-full" action={formSubmit}>
                 <div className="flex flex-col justify-center items-center  mb-3 w-full gap-x-2">
-                    {loginConstants.map((item) => (
-                        <Input key={item.id}
+                    {loginConstants.map((item, index) => (
+                        <Input key={`login-field-${item.inputName}-${index}`}
+                            id={`login-field-${item.inputName}-${index}`}
                             labelText={item.labelText}
                             labelClass={item.labelClass}
                             inputType={item.inputType}
@@ -72,4 +73,4 @@ const Logins = () => {
     );
 };
 
-export default Logins;
+export default Login;

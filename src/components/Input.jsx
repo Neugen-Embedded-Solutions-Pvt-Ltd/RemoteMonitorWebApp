@@ -10,9 +10,8 @@ const Input = ({
     inputPlaceholder,
     inputClass,
     isRequired=false,
-    props
+
 }) => {
-    console.log(`Input ID: ${id}, isRequired: ${isRequired}`); // Debugging log
     return (
         <div className="input-wrapper flex flex-col w-inputBox mb-2" key={id}>
             <label htmlFor={labelClass}>{labelText}<span className="required-field"></span> </label>

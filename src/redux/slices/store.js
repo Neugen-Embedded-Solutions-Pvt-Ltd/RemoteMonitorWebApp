@@ -1,12 +1,8 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authReducer from "./AuthSlice";
 import { persistReducer, persistStore } from "redux-persist";
-import storage from "redux-persist/lib/storage";
-import thunkMiddleware from "redux-thunk";
+import storage from "redux-persist/lib/storage"; 
 import logger from "redux-logger";
-console.log(typeof thunk);
-
-
 // Configure persist
 const persistConfig = {
     key: "root",
@@ -32,5 +28,5 @@ const store = configureStore({
       },
     }).concat(logger),
 });
-export const persistor = persistStore(store);
+// export const persistor = persistStore(store);
 export default store;

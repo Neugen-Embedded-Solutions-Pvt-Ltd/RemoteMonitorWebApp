@@ -1,3 +1,4 @@
+import validator from "validator";
 // import necessary modules and actions
 import Api from "../../utils/api";
 import {
@@ -6,10 +7,21 @@ import {
   setError,
   removeError,
 } from "../slices/AuthSlice.js";
+import { loginUserApi } from "../../services/AuthService.js";
 
 // Helper function to validate email format using RegEx
+const sanitizeInput = (input) => {
+  const element = document.createElement("div");
+  element.innerText = input;
+  return element.innerHTML;
+};
+
 const validateEmail = (email) => {
-  return /\S+@\S+\.\S+/.test(email); // Check email contain '@' and '.'
+  if (typeof email !== "string") {
+    throw new TypeError("Input must be a string");
+  }
+  const sanitizedEmail = sanitizeInput(email);
+  return validator.isEmail(sanitizedEmail);
 };
 
 // Fields that should not trigger validation errors if empty
@@ -119,7 +131,7 @@ const validateRequiredFields = (data, formType, dispatch) => {
 export const registerUser = (userData, navigate) => async (dispatch) => {
   try {
     // Set loading state to true before starting the registration process
-    dispatch(setLoading(true));
+    dispatch(setLoading(false));
     dispatch(removeError("register")); // Remove any previous errors
 
     // Validate all required fields
@@ -203,57 +215,31 @@ export const registerUser = (userData, navigate) => async (dispatch) => {
   }
 };
 
-// Action for user login
-export const LoginUser = (formData, navigate) => (dispatch) => {
+ 
+export const LoginUser = (formData, navigate) => async (dispatch) => {
   try {
-   
+    dispatch(setLoading(true)); // Set loading state
+    dispatch(removeError("login")); // Clear previous errors
+
     console.log("formData:", formData);
-    dispatch(setLoading(false));
-    dispatch(removeError("login"));
 
-    // Validating all required feilds
-    // let hasErrors = validateRequiredFields(formData, "login", dispatch);
-  
-    // checking valid username
-    // if (formData.username.length < 6) {
-    //   dispatch(
-    //     setError({
-    //       formType: "login",
-    //       fieldName: "username",
-    //       error: "usernmae min length 6",
-    //     })
-    //   );
-    //   hasErrors = true;
-    // }
+    const data = await loginUserApi(formData); // Call the API
+    dispatch(setLoading(false)); // Stop loading
 
-    // if (hasErrors) return true;
+    console.log("login response:", data);
 
-    // Make API call for user login
-    Api.post("/auth/login", formData)
-    .then((response) =>{
-      console.log("login resposne:", response);
-
-      localStorage.setItem("token", response.data.token);
-      dispatch(setUser(response.data));
-      navigate('/home')
-    }
-
-    ).catch((error)=>{
-      console.log(error);
-      dispatch(
-        setError({
-          formType: "login",
-          fieldName: "general",
-          error: error.response.data.message,
-        })
-      );
-    })
+    localStorage.setItem("token", data.token); // Save token
+    dispatch(setUser(data)); // Update user state
+    navigate("/home"); // Navigate to home
   } catch (error) {
+    dispatch(setLoading(false)); // Stop loading on error
+    console.error("Login error:", error);
+
     dispatch(
       setError({
         formType: "login",
         fieldName: "general",
-        error: error.message,
+        error: error.message || "Something went wrong. Please try again.",
       })
     );
   }

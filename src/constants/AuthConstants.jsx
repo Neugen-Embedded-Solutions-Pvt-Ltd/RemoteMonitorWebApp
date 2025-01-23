@@ -1,6 +1,6 @@
 export const loginConstants = [
     {
-        id: 1,
+        id: 'username_input',
         labelText: "User Name",
         labelClass: "text-sm mb-2",
         inputType: "text",
@@ -10,7 +10,7 @@ export const loginConstants = [
         isRequired:true,
     },
     {
-        id: 2,
+        id: 'password_input',
         labelText: "Password",
         labelClass: "text-sm mb-2",
         inputType: "password",

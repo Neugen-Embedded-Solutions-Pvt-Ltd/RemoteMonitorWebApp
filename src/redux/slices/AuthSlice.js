@@ -29,7 +29,6 @@ const authSlice = createSlice({
     removeError: (state, action) => {
       const formType = action.payload;
       state.errors[formType] = {};
-      state.isAuthenticated = false;
     },
   },
 });
