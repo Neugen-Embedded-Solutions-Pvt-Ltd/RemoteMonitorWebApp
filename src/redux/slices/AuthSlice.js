@@ -7,10 +7,10 @@ const initialState = {
   errors: {
     login: {},
     register: {},
+    forgotpassword: {},
+    resetpassword: {},
   },
 };
-//  state.isAuthenticated = false;
-// Creating Authentication slice slice
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -33,6 +33,11 @@ const authSlice = createSlice({
   },
 });
 
-export const { setLoading, setUser, setError, removeError } = authSlice.actions;
+export const {
+  setLoading,
+  setUser,
+  setError,
+  removeError,
+} = authSlice.actions;
 
 export default authSlice.reducer;

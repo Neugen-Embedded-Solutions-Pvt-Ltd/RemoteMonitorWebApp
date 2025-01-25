@@ -104,7 +104,6 @@ body {
 }
 .submit-btn {
   background-color: #003465;
-  width: 50%;
 }
 
 .error-message {
@@ -116,8 +115,7 @@ body {
 }
 .input-wrapper input {
   border-color: #0047ab;
-  color: #0047ab;
-  border-radius: 0.1rem;
+  color: #0047ab; 
 }
 
 .redirect-wrapper {
@@ -139,4 +137,11 @@ body {
 
 .login-btn{
   background-color: #003465;
+}
+.poup-bg-color{
+    background-color: #2D9020;
+}
+
+.btn-text-color{
+  color: #0047ab;
 }

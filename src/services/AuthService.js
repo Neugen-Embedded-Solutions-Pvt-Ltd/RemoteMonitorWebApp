@@ -3,12 +3,29 @@ import Api from "../utils/api"; // Assume you already have an `Api` instance con
 
 export const loginUserApi = async (formData) => {
   try {
-  
     const response = await Api.post("/auth/login", formData);
     return response.data;
   } catch (error) {
-    throw error.response
-      ? error.response.data
-      : { message: "An unexpected error occurred." };
+    throw error ? error : { message: "An unexpected error occurred." };
+  }
+};
+
+export const ForgotPasswordApi = async (formData) => {
+  try {
+    const response = await Api.post("/auth/forgotpassword", formData);
+    return response;
+  } catch (error) {
+    throw error ? error : { message: "An unexpected error occurred." };
+  }
+};
+
+export const resetPasswordApi = async (formData) => {
+  try { 
+    const response = await Api.put("/auth/resetpassword", formData);
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.log(error)
+    throw error ? error : { message: "An unexpected error occurred." };
   }
 };

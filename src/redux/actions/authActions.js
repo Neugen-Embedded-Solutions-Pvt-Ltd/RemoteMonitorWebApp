@@ -7,7 +7,11 @@ import {
   setError,
   removeError,
 } from "../slices/AuthSlice.js";
-import { loginUserApi } from "../../services/AuthService.js";
+import {
+  ForgotPasswordApi,
+  loginUserApi,
+  resetPasswordApi,
+} from "../../services/AuthService.js";
 
 // Helper function to validate email format using RegEx
 const sanitizeInput = (input) => {
@@ -131,7 +135,7 @@ const validateRequiredFields = (data, formType, dispatch) => {
 export const registerUser = (userData, navigate) => async (dispatch) => {
   try {
     // Set loading state to true before starting the registration process
-    dispatch(setLoading(false));
+    // dispatch(setLoading(false));
     dispatch(removeError("register")); // Remove any previous errors
 
     // Validate all required fields
@@ -215,13 +219,10 @@ export const registerUser = (userData, navigate) => async (dispatch) => {
   }
 };
 
- 
 export const LoginUser = (formData, navigate) => async (dispatch) => {
   try {
     dispatch(setLoading(true)); // Set loading state
     dispatch(removeError("login")); // Clear previous errors
-
-    console.log("formData:", formData);
 
     const data = await loginUserApi(formData); // Call the API
     dispatch(setLoading(false)); // Stop loading
@@ -230,7 +231,7 @@ export const LoginUser = (formData, navigate) => async (dispatch) => {
 
     localStorage.setItem("token", data.token); // Save token
     dispatch(setUser(data)); // Update user state
-    navigate("/home"); // Navigate to home
+    navigate("/"); // Navigate to home
   } catch (error) {
     dispatch(setLoading(false)); // Stop loading on error
     console.error("Login error:", error);
@@ -244,3 +245,50 @@ export const LoginUser = (formData, navigate) => async (dispatch) => {
     );
   }
 };
+
+export const ForgotPassword = (formData, navigate) => async (dispatch) => {
+  try {
+    dispatch(setLoading(true));
+    dispatch(removeError("forgotpassword"));
+
+    const response = await ForgotPasswordApi(formData);
+    console.log(response);
+    // navigate('/login');
+  } catch (error) {
+    dispatch(setLoading(false)); // Stop loading on error
+    console.log("forgotpassword error:", error);
+
+    dispatch(
+      setError({
+        formType: "forgotpassword",
+        fieldName: "general",
+        error: error.message || "Something went wrong. Please try again.",
+      })
+    );
+  }
+};
+
+export const ResetPassword = (formData) => async (dispatch) => {
+  try {
+    dispatch(setLoading(true));
+    dispatch(removeError("resetpassword"));
+
+    const response = await resetPasswordApi(formData);
+
+    let data = response.data;
+    console.log(data);
+    dispatch(setLoading(false));
+  } catch (error) {
+    dispatch(setLoading(false)); // Stop loading on error
+    console.log("resetpassword error:", error);
+
+    dispatch(
+      setError({
+        formType: "resetpassword",
+        fieldName: "general",
+        error: error.message || "Something went wrong. Please try again.",
+      })
+    );
+  }
+};
+// manoj23878@gmail.com

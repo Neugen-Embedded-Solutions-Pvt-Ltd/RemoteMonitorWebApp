@@ -10,10 +10,23 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import store from "./redux/slices/store";
 import ProtectedRoutes from "./components/ProtectedRoutes";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 const routesConfig = [
   { path: "/login", element: <Login />, isProtected: false },
   { path: "/register", element: <Register />, isProtected: false },
+  {
+    path: "/forgot-password",
+    element: <ForgotPasswordPage />,
+    isProtected: false,
+  },
+  {
+    path: "/reset-password",
+    element: <ResetPasswordPage />,
+    isProtected: false,
+  },
+
   { path: "/", element: <HomePage />, isProtected: true },
 ];
 

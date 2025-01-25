@@ -60,7 +60,7 @@ const Register = () => {
               name="device_id"
               value={formdata.device_id}
               onChange={handleChange}
-              className="border rounded-small bg-transparent px-2"
+              className="border rounded-md bg-transparent p-2 w-inputBox"
               required
             />
             {errors.register.device_id && (
@@ -73,7 +73,7 @@ const Register = () => {
 
         <div className="flex mb-3 w-full gap-x-2">
           <div className="input-wrapper flex flex-col w-inputBox ">
-            <label className="text-sm">
+            <label className="text-sm mb-2">
               First Name<span className="required-field"></span>
             </label>
             <input
@@ -81,7 +81,7 @@ const Register = () => {
               name="first_name"
               value={formdata.first_name}
               onChange={handleChange}
-              className="border rounded-small bg-transparent px-2"
+              className="border rounded-md bg-transparent p-2 w-inputBox"
               required
             />
             {errors.register.first_name && (
@@ -91,13 +91,13 @@ const Register = () => {
             )}
           </div>
           <div className="input-wrapper flex flex-col w-inputBox">
-            <label className="text-sm">Last Name</label>
+            <label className="text-sm mb-2">Last Name</label>
             <input
               type="text"
               name="last_name"
               value={formdata.last_name}
               onChange={handleChange}
-              className="border rounded-small bg-transparent px-2"
+              className="border rounded-md bg-transparent p-2 w-inputBox"
             />
             {errors.register.last_name && (
               <div className="text-sm error-message">
@@ -108,7 +108,7 @@ const Register = () => {
         </div>
         <div className="flex mb-3 w-full gap-x-2">
           <div className="input-wrapper flex flex-col w-full w-inputBox">
-            <label className="text-sm">
+            <label className="text-sm mb-2">
               Email Address<span className="required-field"></span>
             </label>
             <input
@@ -116,7 +116,7 @@ const Register = () => {
               name="email"
               value={formdata.email}
               onChange={handleChange}
-              className="border rounded-small bg-transparent px-2"
+              className="border rounded-md bg-transparent p-2 w-inputBox"
             />
             {errors.register.email && (
               <div className="text-sm error-message">
@@ -125,7 +125,7 @@ const Register = () => {
             )}
           </div>
           <div className="input-wrapper flex flex-col w-full w-inputBox">
-            <label className="text-sm">
+            <label className="text-sm mb-2">
               Username<span className="required-field"></span>
             </label>
             <input
@@ -133,7 +133,7 @@ const Register = () => {
               name="username"
               value={formdata.username}
               onChange={handleChange}
-              className="border rounded-small bg-transparent px-2"
+              className="border rounded-md bg-transparent p-2 w-inputBox"
               required
             />
             {errors.register.username && (
@@ -146,7 +146,7 @@ const Register = () => {
 
         <div className="flex mb-3 w-full gap-x-2">
           <div className="input-wrapper flex flex-col w-full w-inputBox">
-            <label className="text-sm">
+            <label className="text-sm mb-2">
               Password<span className="required-field"></span>
             </label>
             <input
@@ -154,7 +154,7 @@ const Register = () => {
               name="password"
               value={formdata.password}
               onChange={handleChange}
-              className="border rounded-small bg-transparent px-2"
+              className="border rounded-md bg-transparent p-2 w-inputBox"
               required
             />
             {errors.register.password && (
@@ -164,7 +164,7 @@ const Register = () => {
             )}
           </div>
           <div className="input-wrapper flex flex-col w-full w-inputBox">
-            <label className="text-sm">
+            <label className="text-sm mb-2">
               Confirm Password<span className="required-field"></span>
             </label>
             <input
@@ -172,7 +172,7 @@ const Register = () => {
               name="confirm_password"
               value={formdata.confirm_password}
               onChange={handleChange}
-              className="border rounded-small bg-transparent px-2"
+              className="border rounded-md bg-transparent p-2 w-inputBox"
               required
             />
             {errors.register.confirm_password && (
@@ -190,7 +190,7 @@ const Register = () => {
         {/* Render error messages for each field dynamically */}
 
         {/* Submit button with loading state */}
-        <div className="w-full flex justify-center">
+        <div className="w-full flex justify-center mt-4">
           <button
             className="capitalize text-white submit-btn rounded-md text-base p-2 w-1/2"
             disabled={isPending} // Disable button while submitting

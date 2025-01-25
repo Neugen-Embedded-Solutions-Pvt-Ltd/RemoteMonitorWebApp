@@ -112,14 +112,13 @@ const HomePage = () => {
     // Fetch data for report generation
     async function getData() {
         try {
-            let res = await Api.post('/iot/tempall', formData, {
-                responseType: 'blob',
+            let res = await Api.post("/iot/temperature-report", formData, {
+              responseType: "blob",
             });
             res = res.data;
-            console.log(res);
+            
             downloadFile(res, `temperature-report-${getfulldate()}.xlsx`);
         } catch (err) {
-            console.log(err.response);
             if (err.response.status === 300) {
                 alert('Select between dates');
             }
@@ -129,12 +128,10 @@ const HomePage = () => {
     // Fetch chart data
     let fetchChartData = async () => {
         try {
-            let res = await Api.get('/iot/temp');
-            console.log(res);
+            let res = await Api.get("/iot/temperature");
             res = res.data;
 
             let data = res.data;
-            console.log(data);
             const chartData = [
                 ['Date', 'High-temp', 'Low-temp'],
                 ...data.map(item => [

@@ -16,6 +16,7 @@ const createApiInstance = () => {
     (config) => {
       const token = localStorage.getItem("token");
       if (token) {
+       
         config.headers.Authorization = `Bearer ${token}`;
       }
       return config;
@@ -57,5 +58,5 @@ const createApiInstance = () => {
 };
 
 const Api = createApiInstance();
-console.log(Api)
+
 export default Api;
