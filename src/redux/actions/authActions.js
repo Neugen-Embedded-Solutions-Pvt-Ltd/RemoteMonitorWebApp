@@ -1,19 +1,37 @@
-// import necessary modules and actions
-import Api from "../../utils/api";
+import validator from "validator";
+import bcrypt from "bcryptjs-react"; 
 import {
   setLoading,
   setUser,
   setError,
   removeError,
-} from "../slices/AuthSlice";
+  setEmailSent,
+} from "../slices/AuthSlice.js";
+import {
+  ForgotPasswordApi,
+  loginUserApi,
+  registerUserApi,
+  resetPasswordApi,
+} from "../../services/AuthService.js";
+import TokenService from "../../services/TokenService.js";
 
 // Helper function to validate email format using RegEx
+const sanitizeInput = (input) => {
+  const element = document.createElement("div");
+  element.innerText = input;
+  return element.innerHTML;
+};
+
 const validateEmail = (email) => {
-  return /\S+@\S+\.\S+/.test(email); // Check email contain '@' and '.'
+  if (typeof email !== "string") {
+    throw new TypeError("Input must be a string");
+  }
+  const sanitizedEmail = sanitizeInput(email);
+  return validator.isEmail(sanitizedEmail);
 };
 
 // Fields that should not trigger validation errors if empty
-const optionalFields = ["last_name", "lastName"];
+const optionalFields = ["last_name", "lastName", "admin_user"];
 
 // Object holding custom error detail for registration form fields
 const errorMessages = {
@@ -33,7 +51,7 @@ const validationRules = {
   // device_id: (value) => /^[a-z]+$/.test(value),
   email: (value) => /\S+@\S+\.\S+/.test(value),
   password: (value) =>
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
+    /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/.test(
       value
     ),
   phone: (value) => /^\d{10}$/.test(value),
@@ -119,7 +137,7 @@ const validateRequiredFields = (data, formType, dispatch) => {
 export const registerUser = (userData, navigate) => async (dispatch) => {
   try {
     // Set loading state to true before starting the registration process
-    dispatch(setLoading(true));
+    // dispatch(setLoading(false));
     dispatch(removeError("register")); // Remove any previous errors
 
     // Validate all required fields
@@ -150,7 +168,7 @@ export const registerUser = (userData, navigate) => async (dispatch) => {
     }
 
     // Check if password and confirm password not match
-    if (userData.password !== userData.password.length) {
+    if (userData.password !== userData.confirm_password) {
       dispatch(
         setError({
           formType: "register",
@@ -163,33 +181,19 @@ export const registerUser = (userData, navigate) => async (dispatch) => {
 
     // If errors exist, stop the registration process
     if (hasErrors) return;
+    const salt = bcrypt.genSaltSync(10);
+    userData = {
+      ...userData,
+      password: bcrypt.hashSync(userData.password, salt),
+    };
+    console.log(userData);
+    const response = await registerUserApi(userData);
+    console.log(response);
 
-    //Making API request to register the user
-    Api.post("/auth/register", userData)
-      .then((response) => {
-        console.log(response);
-
-        localStorage.setItem("token", response.data.token); // Store the token in localStorage
-        dispatch(setUser(response.data)); // Set user data in the store
-        alert("login success");
-
-        navigate("/home");
-      })
-      .catch((error) => {
-        console.log(error); // Log the error for debugging
-        let response = error.response.data;
-        console.log(response);
-        if (response.status) {
-          // If there is an error status, set general error message
-          dispatch(
-            setError({
-              formType: "register",
-              fieldName: "general",
-              error: response.message,
-            })
-          );
-        }
-      });
+    TokenService.setToken(response.accessToken);
+    dispatch(setLoading(false));
+    dispatch(setUser(response.data));
+    navigate("/");
   } catch (error) {
     console.log(error);
     // Dispatch error to the store in case of unexpected failure
@@ -198,6 +202,102 @@ export const registerUser = (userData, navigate) => async (dispatch) => {
         formType: "register",
         fieldName: error,
         message: error.message,
+      })
+    );
+  }
+};
+
+export const LoginUser = (formData, navigate) => async (dispatch) => {
+  try {
+    dispatch(setLoading(true));
+    dispatch(removeError("login"));
+
+    const data = await loginUserApi(formData);
+    dispatch(setLoading(false));
+
+    console.log("login response:", data);
+
+    TokenService.setToken(data.accessToken);
+    localStorage.setItem("token", data.accessToken);
+    dispatch(setUser(data));
+    navigate("/");
+  } catch (error) {
+    dispatch(setLoading(false));
+    console.error("Login error:", error);
+
+    dispatch(
+      setError({
+        formType: "login",
+        fieldName: "general",
+        error: error.message || "Something went wrong. Please try again.",
+      })
+    );
+  }
+};
+
+export const ForgotPassword = (formData, navigate) => async (dispatch) => {
+  try {
+    dispatch(setLoading(true));
+    dispatch(removeError("forgotpassword"));
+
+    const response = await ForgotPasswordApi(formData);
+    console.log(response);
+    dispatch(setLoading(false));
+    dispatch(setEmailSent(true));
+  } catch (error) {
+    dispatch(setLoading(false));
+    console.log("forgotpassword error:", error);
+
+    dispatch(
+      setError({
+        formType: "forgotpassword",
+        fieldName: "general",
+        error: error.message || "Something went wrong. Please try again.",
+      })
+    );
+  }
+};
+
+export const ResetPassword = (formData) => async (dispatch) => {
+  try {
+    dispatch(setLoading(true));
+    dispatch(removeError("resetpassword"));
+
+    const response = await resetPasswordApi(formData);
+
+    let data = response.data;
+    console.log(data);
+    dispatch(setLoading(false));
+  } catch (error) {
+    dispatch(setLoading(false));
+    console.log("resetpassword error:", error);
+
+    dispatch(
+      setError({
+        formType: "resetpassword",
+        fieldName: "general",
+        error: error.message || "Something went wrong. Please try again.",
+      })
+    );
+  }
+};
+
+export const logoutUser = (formData) => async (dispatch) => {
+  try {
+    dispatch(setLoading(true));
+    dispatch(removeError("logout"));
+
+    TokenService.removeToken();
+    dispatch(setLoading(false));
+  } catch (error) {
+    dispatch(setLoading(false));
+    console.log("logout error:", error);
+
+    dispatch(
+      setError({
+        formType: "logout",
+        fieldName: "general",
+        error: error.message || "Something went wrong. Please try again.",
       })
     );
   }

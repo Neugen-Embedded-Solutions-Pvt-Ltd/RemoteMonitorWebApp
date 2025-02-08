@@ -11,58 +11,7 @@ import {
    
 } from '../utils/downloadFile';
 import { timerConvert } from '../utils/dateFormat';
-// export const data = [
-//     ['Days', 'high-temp', 'low-temp'],
-//     ['MON', 28, 16],
-//     ['TUE', 26, 15],
-//     ['WED', 29, 16],
-//     ['THU', 25, 17],
-//     ['FRI', 34, 17],
-//     ['SAT', 34, 15],
-//     ['SUN', 31, 23],
-//     ['MON', 29, 15],
-//     ['TUE', 25, 16],
-//     ['WED', 32, 16],
-//     ['THU', 31, 20],
-//     ['FRI', 35, 15],
-//     ['SAT', 25, 20],
-//     ['SUN', 29, 21],
-//     ['MON', 28, 23],
-//     ['TUE', 29, 15],
-//     ['WED', 25, 15],
-//     ['THU', 25, 17],
-//     ['FRI', 32, 24],
-//     ['SAT', 32, 17],
-//     ['SUN', 31, 19],
-//     ['MON', 35, 20],
-//     ['TUE', 35, 17],
-//     ['WED', 27, 23],
-//     ['THU', 28, 16],
-//     ['FRI', 31, 23],
-//     ['SAT', 25, 23],
-//     ['SUN', 30, 22],    
-//     ['MON', 29, 17],
-//     ['TUE', 30, 15],
-//     ['WED', 25, 21],
-//     ['THU', 34, 16],
-//     ['FRI', 27, 20],
-//     ['SAT', 30, 18],
-//     ['SUN', 30, 18],
-//     ['MON', 20, 10],
-//     ['TUE', 31, 23],
-//     ['WED', 31, 16],
-//     ['THU', 30, 18],
-//     ['FRI', 28, 15],
-//     ['SAT', 35, 23],
-//     ['SUN', 27, 20],
-//     ['MON', 27, 19],
-//     ['TUE', 32, 17],
-//     ['WED', 29, 17],
-//     ['THU', 29, 24],
-//     ['FRI', 29, 19],
-//     ['SAT', 25, 22]
-// ];
-
+ 
 export const options = {
     title: 'Temperature',
     subtitle: 'Temperature in different days',
@@ -80,18 +29,14 @@ export const options = {
       },
 
 };
-
-
 const HomePage = () => {
     // State for form data
     let [formData, setFormData] = useState({
         fromdate: "",
         todate: ""
     });
-
     // State for fetched data
     const [fetchedData, setFetchedData] = useState('');
-
     // Handle input changes
     const handleChanges = (e) => {
         const { name, value } = e.target;
@@ -100,7 +45,6 @@ const HomePage = () => {
             [name]: value
         }));
     };
-
     // Get today's date in MM-DD-YYYY format
     function getfulldate() {
         const today = new Date();
@@ -112,14 +56,13 @@ const HomePage = () => {
     // Fetch data for report generation
     async function getData() {
         try {
-            let res = await Api.post('/iot/tempall', formData, {
-                responseType: 'blob',
+            let res = await Api.post("/iot/temperature-report", formData, {
+              responseType: "blob",
             });
             res = res.data;
-            console.log(res);
+            
             downloadFile(res, `temperature-report-${getfulldate()}.xlsx`);
         } catch (err) {
-            console.log(err.response);
             if (err.response.status === 300) {
                 alert('Select between dates');
             }
@@ -129,16 +72,15 @@ const HomePage = () => {
     // Fetch chart data
     let fetchChartData = async () => {
         try {
-            let res = await Api.get('/iot/temp');
-            console.log(res);
+            
+            let res = await Api.get("/iot/temperature");
             res = res.data;
-
-            let data = res.data;
-            console.log(data);
+            console.log(res.data.records)
+            let data = res.data.records;
             const chartData = [
                 ['Date', 'High-temp', 'Low-temp'],
                 ...data.map(item => [
-                    timerConvert(item.created_at),
+                    timerConvert(item.createdAt),
                     Number(item.max_temperature),
                     Number(item.min_temperature)
                 ])

@@ -4,13 +4,15 @@ const initialState = {
   user: null,
   isAuthenticated: false,
   isLoading: false,
+  isEmailSent: false,
   errors: {
     login: {},
     register: {},
+    forgotpassword: {},
+    resetpassword: {},
+    logout:{},
   },
 };
-//  state.isAuthenticated = false;
-// Creating Authentication slice slice
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -29,11 +31,15 @@ const authSlice = createSlice({
     removeError: (state, action) => {
       const formType = action.payload;
       state.errors[formType] = {};
-      state.isAuthenticated = false;
+    },
+    setEmailSent: (state, action) => {
+      console.log(action.payload);
+      state.isEmailSent = action.payload;
     },
   },
 });
 
-export const { setLoading, setUser, setError, removeError } = authSlice.actions;
+export const { setLoading, setUser, setError, removeError, setEmailSent } =
+  authSlice.actions;
 
 export default authSlice.reducer;
