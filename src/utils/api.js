@@ -1,37 +1,45 @@
-import axios from "axios";
-
-const API_BASE_URL = "http://localhost:3001";
+import axios from "axios";  
 
 const createApiInstance = () => {
   const instance = axios.create({
-    baseURL: API_BASE_URL,
+    baseURL: process.env.REACT_APP_API_URL,
     timeout: 10000,
     headers: {
       "Content-Type": "application/json",
     },
   });
 
-  // Request interceptor
   instance.interceptors.request.use(
     (config) => {
-      const token = localStorage.getItem("token");
-      if (token) {
-       
-        config.headers.Authorization = `Bearer ${token}`;
+      try {
+        const token = localStorage.getItem("token");
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+      } catch (error) {
+        console.error("Error retrieving token from localStorage:", error);
       }
       return config;
     },
-    (error) => Promise.reject(error)
+    (error) => {
+      console.error("Request Interceptor Error:", error);
+      return Promise.reject(error);
+    }
   );
 
-  // Response interceptor
   instance.interceptors.response.use(
     (response) => response,
     (error) => {
       const defaultErrorMessage = "An unexpected error occurred";
 
+      if (error.code === "ECONNABORTED") {
+        console.error("Request Timeout Error:", error);
+        return Promise.reject({
+          message: "Request timed out. Please try again.",
+        });
+      } 
       if (error.response) {
-        // Server responded with an error status
+        console.error("Server Response Error:", error.response);
         const serverMessage =
           error.response.data?.message || defaultErrorMessage;
         return Promise.reject({
@@ -41,22 +49,20 @@ const createApiInstance = () => {
       }
 
       if (error.request) {
-        // Request made but no response received
+        console.error("No Response from Server:", error.request);
         return Promise.reject({
           message: "No response from server. Please check your connection.",
         });
       }
 
-      // Network or other errors
+      console.error("Unexpected Error:", error);
       return Promise.reject({
         message: defaultErrorMessage,
       });
     }
   );
-
   return instance;
 };
 
 const Api = createApiInstance();
-
 export default Api;

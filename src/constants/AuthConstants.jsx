@@ -87,6 +87,7 @@ export const forgotPasswordConstants = [
         id: 'username_email',
         labelText: "Enter your email address to receive a password reset link",
         labelClass: "text-sm pb-2",
+        spanClassName:"hidden",
         inputType: "email",
         inputName: "email",
         inputPlaceholder: "",

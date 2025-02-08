@@ -1,53 +1,53 @@
-class TokenService {
-  // initialize token as null
+const defaultConfig = {
+  path: "/",
+  security: true,
+  sameSite: "Lax",
+  httpOnly: false,
+};
 
-  static #token = null;
-
-  //   Configuration for Token store
-  static #config = {
-    path: "/",
-    security: true,
-    sameSite: "strict",
-    httpOnly: true,
+const TokenService = (() => {
+  let token = null;
+ console.log(token);
+  const setToken = (newToken) => {
+  
+    token = newToken;
+     
   };
 
-  //     Set token to variable
-  static setToken(token) {
-    this.#token = token;
-  }
+  const getToken = () => {
+    return token;
+  };
 
-  //   getting token from variable
-  static getToken() {
-    return this.#token;
-  }
+  const removeToken = () => {
+    token = null;
+    removeRefreshToken();
+  };
 
-  //   Remove Access token
+  const setRefreshToken = (refreshToken, config = defaultConfig) => {
+    document.cookie = `refreshtoken=${refreshToken};`; //${generateTokenString( config )}
+  };
 
-  static removeToken() {
-    this.token = null;
-    this.removeRefreshToken();
-  }
+  const removeRefreshToken = (config = defaultConfig) => {
+    document.cookie = `refreshtoken=;expires=Thu, 01 Jan 1970 00:00:00 GMT;${generateTokenString(
+      config
+    )}`;
+  };
 
-  // set Refresh token to header in httpOnly cookie
-  static setRefreshToken() {
-    document.cookie = `refreshtoken:${
-      this.#token
-    };${this.generateTokenString()}`;
-  }
+  const generateTokenString = (config) => {
+    const { path, security, sameSite, httpOnly } = config;
 
-  //   Remove Refresh Token from HttpOnly or from header
-  static removeRefreshToken() {
-    document.cookie = `refreshtoken: expires:Thu, 01 Jan 1970 00:00:00 GMT;${this.generateTokenString()}`;
-  }
-
-  //   generate token string
-  static generateTokenString() {
-    const { path, security, sameSite, httpOnly } = this.#config;
-
-    return `path=${path};security=${security};sameSite=${sameSite};httpsOnly=${
-      httpOnly ? httpOnly : ""
+    return `path=${path};security=${security};sameSite=${sameSite};${
+      httpOnly ? "HttpOnly" : ""
     }`;
-  }
-}
+  };
+
+  return {
+    setToken,
+    getToken,
+    removeToken,
+    setRefreshToken,
+    removeRefreshToken,
+  };
+})();
 
 export default TokenService;

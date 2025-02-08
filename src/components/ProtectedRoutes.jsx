@@ -4,8 +4,8 @@ import { useSelector } from 'react-redux';
 import { Outlet, Navigate } from 'react-router-dom';
 
 const ProtectedRoutes = () => {
-    const { user, isAuthenticated } = useSelector((state) => state.auth);
-
+    const { isAuthenticated } = useSelector((state) => state.auth);
+   
     // Use useEffect for side effects instead of rendering logic
     if (!isAuthenticated) {
         return <Navigate to="/login" replace />;

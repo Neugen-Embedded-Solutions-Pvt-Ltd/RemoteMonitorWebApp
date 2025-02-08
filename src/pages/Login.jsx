@@ -1,15 +1,15 @@
-import React, { useActionState } from "react";
+import React, { useActionState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loginConstants } from "../constants/AuthConstants";
 import Input from "../components/Input";
 import SubmitBtn from "../components/SubmitBtn";
 import { LoginUser } from "../redux/actions/authActions";
 import { useNavigate } from "react-router-dom";
+import { removeError } from "../redux/slices/AuthSlice";
 
 const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    // dispatch(removeError("login"));
     // Get errors, user data, and loading state from Redux store
     const { errors } = useSelector((state) => state.auth);
 
@@ -18,7 +18,10 @@ const Login = () => {
         user: null,
         error: null,
     });
+    useEffect(() => {
+        dispatch(removeError("login"));
 
+    }, [dispatch]);
     function HandleLogin(prevState, FormData) {
         let username = FormData.get("username");
         let password = FormData.get("password");
@@ -42,7 +45,7 @@ const Login = () => {
         navigate("/forgot-password");
     }
     return (
-        <div className="register-container m-auto w-full flex flex-col justify-center h-full">
+        <div className="register-container m-auto w-full flex flex-col justify-center h-full px-3">
             <h2 className="text-center font-bold mb-3">Sign in to your device</h2>
             <form className="flex flex-col w-full" action={formSubmit}>
                 <div className="flex flex-col justify-center items-center  mb-3 w-full gap-x-2">

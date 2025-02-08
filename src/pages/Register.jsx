@@ -1,18 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useActionState } from "react";
 import { registerUser } from "../redux/actions/authActions";
+import { removeError } from "../redux/slices/AuthSlice";
 
 const Register = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   // Get errors, user data, and loading state from Redux store
-  const { errors, user } = useSelector((state) => state.auth);
+  const { errors } = useSelector((state) => state.auth);
 
-  // Log user data for debugging
-  console.log("user: ", user);
+  
 
   // State to manage the form data
   const [formdata, setFormdata] = useState({
@@ -23,6 +23,7 @@ const Register = () => {
     username: "",
     password: "",
     confirm_password: "",
+    admin_user: false,
   });
 
   // Handle input change in the form fields
@@ -32,7 +33,10 @@ const Register = () => {
       [e.target.name]: e.target.value,
     });
   };
+  useEffect(() => {
+    dispatch(removeError("register"));
 
+  }, [dispatch]);
   // Handle registration form submission
   const handleRegister = () => {
     dispatch(registerUser(formdata, navigate)); // Dispatch the registerUser action
@@ -52,7 +56,7 @@ const Register = () => {
         {/* Display error messages below each field when necessary */}
         <div className="flex mb-3 w-full gap-x-2">
           <div className="input-wrapper flex flex-col w-inputBox">
-            <label className="text-sm ">
+            <label className="ttext-lg mb-2">
               Device ID <span className="required-field"></span>
             </label>
             <input
@@ -73,7 +77,7 @@ const Register = () => {
 
         <div className="flex mb-3 w-full gap-x-2">
           <div className="input-wrapper flex flex-col w-inputBox ">
-            <label className="text-sm mb-2">
+            <label className="text-lg mb-2">
               First Name<span className="required-field"></span>
             </label>
             <input
@@ -91,7 +95,7 @@ const Register = () => {
             )}
           </div>
           <div className="input-wrapper flex flex-col w-inputBox">
-            <label className="text-sm mb-2">Last Name</label>
+            <label className="text-lg mb-2">Last Name</label>
             <input
               type="text"
               name="last_name"
@@ -108,7 +112,7 @@ const Register = () => {
         </div>
         <div className="flex mb-3 w-full gap-x-2">
           <div className="input-wrapper flex flex-col w-full w-inputBox">
-            <label className="text-sm mb-2">
+            <label className="text-lg mb-2">
               Email Address<span className="required-field"></span>
             </label>
             <input
@@ -125,7 +129,7 @@ const Register = () => {
             )}
           </div>
           <div className="input-wrapper flex flex-col w-full w-inputBox">
-            <label className="text-sm mb-2">
+            <label className="text-lg mb-2">
               Username<span className="required-field"></span>
             </label>
             <input
@@ -146,7 +150,7 @@ const Register = () => {
 
         <div className="flex mb-3 w-full gap-x-2">
           <div className="input-wrapper flex flex-col w-full w-inputBox">
-            <label className="text-sm mb-2">
+            <label className="text-lg mb-2">
               Password<span className="required-field"></span>
             </label>
             <input
@@ -164,7 +168,7 @@ const Register = () => {
             )}
           </div>
           <div className="input-wrapper flex flex-col w-full w-inputBox">
-            <label className="text-sm mb-2">
+            <label className="text-lg mb-2">
               Confirm Password<span className="required-field"></span>
             </label>
             <input

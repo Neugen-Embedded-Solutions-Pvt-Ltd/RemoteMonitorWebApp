@@ -1,17 +1,16 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import { persistStore } from "redux-persist";
+import { useSelector } from "react-redux";
 import "./App.css";
 
 import HomePage from "./pages/HomePage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import store from "./redux/slices/store";
-import ProtectedRoutes from "./components/ProtectedRoutes";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
+
+import ProtectedRoutes from "./components/ProtectedRoutes";
+import RedirectToHome from "./components/RedirectToHome";
 
 const routesConfig = [
   { path: "/login", element: <Login />, isProtected: false },
@@ -29,30 +28,25 @@ const routesConfig = [
 
   { path: "/", element: <HomePage />, isProtected: true },
 ];
-
 const App = () => {
-  const persistor = React.useMemo(() => persistStore(store), []);
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <BrowserRouter>
-          <div className="App h-dvh">
-            <Routes>
-              {routesConfig.map(({ path, element, isProtected }) =>
-                isProtected ? (
-                  <Route key={path} element={<ProtectedRoutes />}>
-                    <Route path={path} element={element} />
-                  </Route>
-                ) : (
-                  <Route key={path} path={path} element={element} />
-                )
-              )}
-            </Routes>
-          </div>
-        </BrowserRouter>
-      </PersistGate>
-    </Provider>
+    <BrowserRouter>
+      <div className="App h-dvh">
+        <Routes>
+          {routesConfig.map(({ path, element, isProtected }) =>
+            isProtected ? (
+              <Route key={path} element={<ProtectedRoutes />}>
+                <Route path={path} element={element} />
+              </Route>
+            ) : (
+              <Route key={path} path={path} element={<RedirectToHome>{element}</RedirectToHome>} />
+            )
+          )}
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 };
 

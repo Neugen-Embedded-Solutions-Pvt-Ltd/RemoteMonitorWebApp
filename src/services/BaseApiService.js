@@ -42,9 +42,6 @@ class BaseApiService {
           if (error.response?.stats === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
 
-            //   try to refresh the token
-            await this.authAction.refreshToken();
-
             //   get the new token and update request
             const token = await this.authAction.getAccessToken();
             originalRequest.headers.Authorization = `Bearer ${token}`;
@@ -54,26 +51,15 @@ class BaseApiService {
 
             return response;
           }
-          // If we get here, either:
-          // 1. It's not a 401 error
-          // 2. We already tried refreshing
-          // So we should throw the original error
           throw error;
         } catch (error) {
-          // if we hit any error during the refresh process
           console.log("Error during refresh the token:", error);
-
-          // If it's refresh fauilre logout the user
           this.authAction.logout();
-
-          // Throw the error for the calling code to handle
           throw error;
         }
       }
     );
   }
-
-  // Helper methods using async/await
   async get(url, config = {}) {
     try {
       const response = await this.api.get(url, config);

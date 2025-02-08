@@ -6,28 +6,32 @@ import Input from "../components/Input";
 import SubmitBtn from "../components/SubmitBtn";
 import { useNavigate } from "react-router";
 import { IoMdInformationCircle } from "react-icons/io";
+import { removeError, setEmailSent } from "../redux/slices/AuthSlice";
 
 const ForgotPasswordPage = () => {
 
     const navigate = useNavigate();
-    const dispatch = useDispatch(); 
+    const dispatch = useDispatch();
 
-    const { isEmailSent, isLoading, errors, set } = useSelector((state) => state.auth);
-   
-    const [data, formSubmit, isPending] = useActionState(forgotPassword, {
-        user: "",
-        error: "",
-    });
+    const { isEmailSent, isLoading, errors } = useSelector((state) => state.auth);
+
+    useEffect(() => {
+        dispatch(removeError("forgotpassword"));
+         
+    }, [dispatch]);
+
+    const [data, formSubmit, isPending] = useActionState(forgotPassword, { data: "" });
+    console.log(isEmailSent);
 
     function forgotPassword(prevState, formData) {
         let email = formData.get("email");
         dispatch(ForgotPassword({ email: email }, navigate));
     }
     return (
-        <div className="register-container m-auto w-full flex flex-col justify-center mt-24">
+        <div className="register-container m-auto w-full flex flex-col justify-center mt-24 px-3">
             <h2 className="text-center font-bold mb-3">Forgot your password?</h2>
             <form className="flex flex-col w-full" action={formSubmit}>
-             
+
                 {isEmailSent ? <div className="poup-bg-color flex gap-x-2 p-2 rounded-md items-center">
                     <div className="text-white text-2xl"><IoMdInformationCircle /></div>
                     <div className="text-white text-base">
@@ -39,6 +43,7 @@ const ForgotPasswordPage = () => {
                             key={`password-field-${item.inputName}-${index}`}
                             id={`password-field-${item.inputName}-${index}`}
                             labelClass={item.labelClass}
+                            spanClassName={item.spanClassName}
                             labelText={item.labelText}
                             inputType={item.inputType}
                             inputName={item.inputName}
@@ -47,11 +52,11 @@ const ForgotPasswordPage = () => {
                             isRequired={item.isRequired}
                         />
                     ))}
-                        {/* {errors.forgotpassword.general && (
+                    {errors.forgotpassword.general && (
                         <p className="text-sm error-message text-center">
                             {errors.forgotpassword.general}
                         </p>
-                    )} */}
+                    )}
                     <div className="w-full flex justify-center mt-5">
                         <SubmitBtn
                             buttonType="submit"
